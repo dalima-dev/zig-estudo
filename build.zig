@@ -8,7 +8,7 @@ pub const Exercise = struct {
     description: []const u8,
 };
 
-pub const exercises = [_]Exercise{};
+pub const exercises = [_]Exercise{ .{ .name = "Prova A", .file_name = "src/prova-a.zig", .run = "prova-a", .description = "Executa prova A" }, .{ .name = "Prova B", .file_name = "src/prova-b.zig", .run = "prova-b", .description = "Executa prova B" } };
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
