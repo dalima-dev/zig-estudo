@@ -5,7 +5,7 @@ const maxRows = 40;
 
 pub var editor: [maxRows][maxColumns]u8 = undefined;
 
-fn userInput() !u8 {
+fn readColumnsInput() !u8 {
     const stdin = std.io.getStdIn().reader();
 
     var buffer: [256]u8 = undefined;
@@ -24,7 +24,7 @@ pub fn main() !void {
     const stdout = std.io.getStdOut().writer();
     try stdout.print("Digite a largura da página (valor entre 50 a 80):\n", .{});
 
-    const columns = userInput();
+    const columns = readColumnsInput();
 
     std.debug.print("{!}\n", .{columns});
 }
