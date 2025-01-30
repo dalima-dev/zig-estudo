@@ -1,4 +1,6 @@
 const std = @import("std");
+const stdin = std.io.getStdIn().reader();
+const stdout = std.io.getStdOut().writer();
 
 const maxColumns = 80;
 const maxRows = 40;
@@ -6,14 +8,14 @@ const maxRows = 40;
 pub var editor: [maxRows][maxColumns]u8 = undefined;
 
 fn readColumnsInput() !u8 {
-    const stdin = std.io.getStdIn().reader();
-
     var buffer: [256]u8 = undefined;
     var columns: u8 = 0;
 
     while ((columns < 50) or (columns > maxColumns)) {
-        if (try stdin.readUntilDelimiterOrEof(buffer[0..], '\n')) |user_input| {
-            columns = try std.fmt.parseInt(u8, user_input, 10);
+        const bytes_read = try stdin.readUntilDelimiterOrEof(buffer[0..], '\n');
+
+        if (bytes_read) |slice| {
+            columns = try std.fmt.parseInt(u8, slice, 10);
         }
     }
 
@@ -21,7 +23,6 @@ fn readColumnsInput() !u8 {
 }
 
 pub fn main() !void {
-    const stdout = std.io.getStdOut().writer();
     try stdout.print("Digite a largura da página (valor entre 50 a 80):\n", .{});
 
     const columns = readColumnsInput();
