@@ -22,10 +22,30 @@ fn readColumnsInput() !u8 {
     return columns;
 }
 
+fn readTextInput() !?[]const u8 {
+    var buffer: [100]u8 = undefined;
+    const bytes_read = try stdin.readUntilDelimiterOrEof(buffer[0..], '\n');
+
+    if (bytes_read) |bytes| {
+        return buffer[0..bytes.len];
+    }
+
+    return null;
+}
+
 pub fn main() !void {
-    try stdout.print("Digite a largura da página (valor entre 50 a 80):\n", .{});
+    // try stdout.print("Digite a largura da página (valor entre 50 a 80):\n", .{});
+    // const columns = readColumnsInput();
 
-    const columns = readColumnsInput();
+    while (true) {
+        try stdout.print("Digite um texto de até 100 caracteres:\n", .{});
+        const text_read = readTextInput() catch "";
 
-    try stdout.print("{!}\n", .{columns});
+        if (text_read) |text| {
+            if (text.len == 0) {
+                try stdout.print("Encerrou!\n", .{});
+                return;
+            }
+        }
+    }
 }
