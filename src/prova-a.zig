@@ -27,5 +27,5 @@ pub fn main() !void {
 
     const columns = readColumnsInput();
 
-    std.debug.print("{!}\n", .{columns});
+    try stdout.print("{!}\n", .{columns});
 }
