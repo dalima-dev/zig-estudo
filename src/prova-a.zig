@@ -7,6 +7,25 @@ const maxRows = 40;
 
 pub var editor: [maxRows][maxColumns]u8 = undefined;
 
+fn intializeEditor() void {
+    for (editor, 0..) |row, i| {
+        for (row, 0..) |element, j| {
+            editor[i][j] = 0;
+            _ = element;
+        }
+    }
+}
+
+fn printEditor() void {
+    for (editor, 0..) |row, i| {
+        for (row, 0..) |element, j| {
+            editor[i][j] = 1;
+            std.debug.print("{} ", .{element}); // Format each element to take up 3 spaces
+        }
+        std.debug.print("\n", .{}); // Newline after each row
+    }
+}
+
 fn readColumnsInput() !u8 {
     var buffer: [256]u8 = undefined;
     var columns: u8 = 0;
@@ -34,6 +53,8 @@ fn readTextInput() !?[]const u8 {
 }
 
 pub fn main() !void {
+    intializeEditor();
+
     // try stdout.print("Digite a largura da página (valor entre 50 a 80):\n", .{});
     // const columns = readColumnsInput();
 
@@ -48,4 +69,6 @@ pub fn main() !void {
             }
         }
     }
+
+    printEditor();
 }
