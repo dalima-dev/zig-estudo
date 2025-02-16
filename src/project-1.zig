@@ -24,8 +24,8 @@ const Base64 = struct {
             return 64;
         var index: u8 = 0;
         for (0..63) |i| {
-            if (self._char_at(i) == char) {
-                index = i;
+            if (self._char_at(@intCast(i)) == char) {
+                index = @intCast(i);
                 break;
             }
         }
@@ -123,4 +123,16 @@ fn _calc_decode_length(input: []const u8) !usize {
     return n_output * 3;
 }
 
-pub fn main() !void {}
+pub fn main() !void {
+    var memory_buffer: [1000]u8 = undefined;
+    var fba = std.heap.FixedBufferAllocator.init(&memory_buffer);
+    const allocator = fba.allocator();
+
+    const text = "Testing some more shit";
+    const etext = "VGVzdGluZyBzb21lIG1vcmUgc2hpdA==";
+    const base64 = Base64.init();
+    const encoded_text = try base64.encode(allocator, text);
+    const decoded_text = try base64.decode(allocator, etext);
+    try stdout.print("Encoded text: {s}\n", .{encoded_text});
+    try stdout.print("Decoded text: {s}\n", .{decoded_text});
+}
