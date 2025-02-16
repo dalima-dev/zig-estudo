@@ -1,6 +1,7 @@
 // https://pedropark99.github.io/zig-book/Chapters/01-base64
 
 const std = @import("std");
+const stdout = std.io.getStdOut().writer();
 
 const Base64 = struct {
     _table: *const [64]u8,
@@ -73,6 +74,35 @@ const Base64 = struct {
 
         return out;
     }
+
+    fn decode(self: Base64, allocator: std.mem.Allocator, input: []const u8) ![]u8 {
+        if (input.len == 0) {
+            return "";
+        }
+        const n_output = try _calc_decode_length(input);
+        var output = try allocator.alloc(u8, n_output);
+        var count: u8 = 0;
+        var iout: u64 = 0;
+        var buf = [4]u8{ 0, 0, 0, 0 };
+
+        for (0..input.len) |i| {
+            buf[count] = self._char_index(input[i]);
+            count += 1;
+            if (count == 4) {
+                output[iout] = (buf[0] << 2) + (buf[1] >> 4);
+                if (buf[2] != 64) {
+                    output[iout + 1] = (buf[1] << 4) + (buf[2] >> 2);
+                }
+                if (buf[3] != 64) {
+                    output[iout + 2] = (buf[2] << 6) + buf[3];
+                }
+                iout += 3;
+                count = 0;
+            }
+        }
+
+        return output;
+    }
 };
 
 fn _calc_encode_length(input: []const u8) !usize {
@@ -93,6 +123,4 @@ fn _calc_decode_length(input: []const u8) !usize {
     return n_output * 3;
 }
 
-pub fn main() !void {
-    std.debug.print("Projeto 1 do livro Introduction to Zig.\n", .{});
-}
+pub fn main() !void {}
