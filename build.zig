@@ -8,7 +8,7 @@ pub const Exercise = struct {
     description: []const u8,
 };
 
-pub const exercises = [_]Exercise{ .{ .name = "prova-a", .file_name = "src/prova-a.zig", .run = "prova-a", .description = "Executa prova A" }, .{ .name = "prova-b", .file_name = "src/prova-b.zig", .run = "prova-b", .description = "Executa prova B" }, .{ .name = "project-1", .file_name = "src/project-1.zig", .run = "project-1", .description = "https://pedropark99.github.io/zig-book/Chapters/01-base64.html" }, .{ .name = "project-2", .file_name = "src/project-2.zig", .run = "project-2", .description = "Executa project 2" } };
+pub const exercises = [_]Exercise{ .{ .name = "prova-a", .file_name = "src/prova-a.zig", .run = "prova-a", .description = "Executa prova A" }, .{ .name = "prova-b", .file_name = "src/prova-b.zig", .run = "prova-b", .description = "Executa prova B" }, .{ .name = "project-1", .file_name = "src/project-1.zig", .run = "project-1", .description = "https://pedropark99.github.io/zig-book/Chapters/01-base64.html" }, .{ .name = "project-2", .file_name = "src/project-2/main.zig", .run = "project-2", .description = "Executa project 2" } };
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
