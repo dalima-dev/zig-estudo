@@ -8,7 +8,7 @@ pub const Socket = struct {
 
     pub fn init() !Socket {
         const host = [4]u8{ 127, 0, 0, 1 };
-        const port = 3490;
+        const port = 3000;
         const addr = net.Address.initIp4(host, port);
         const socket = try std.posix.socket(addr.any.family, std.posix.SOCK.STREAM, std.posix.IPPROTO.TCP);
         const stream = net.Stream{ .handle = socket };
