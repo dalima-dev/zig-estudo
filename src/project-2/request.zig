@@ -20,6 +20,19 @@ pub const Method = enum {
     }
 };
 
+const Request = struct {
+    method: Method,
+    version: []const u8,
+    uri: []const u8,
+    pub fn init(method: Method, uri: []const u8, version: []const u8) Request {
+        return Request{
+            .method = method,
+            .uri = uri,
+            .version = version,
+        };
+    }
+};
+
 pub fn read_request(connection: Connection, buffer: []u8) !void {
     const reader = connection.stream.reader();
     _ = try reader.read(buffer);
