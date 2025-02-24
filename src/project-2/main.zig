@@ -1,6 +1,6 @@
 const std = @import("std");
 const config = @import("config.zig");
-const request = @import("request.zig");
+const req = @import("request.zig");
 const stdout = std.io.getStdOut().writer();
 
 pub fn initialize_buffer() [1000]u8 {
@@ -20,7 +20,8 @@ pub fn main() !void {
     const connection = try server.accept();
 
     var buffer = initialize_buffer();
-    try request.read_request(connection, &buffer);
+    try req.read_request(connection, &buffer);
+    const request = req.parse_request(&buffer);
 
-    try stdout.print("{s}", .{buffer});
+    try stdout.print("{any}\n", .{request});
 }
