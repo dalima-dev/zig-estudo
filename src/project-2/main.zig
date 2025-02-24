@@ -1,6 +1,7 @@
 const std = @import("std");
 const config = @import("config.zig");
 const req = @import("request.zig");
+const res = @import("response.zig");
 const stdout = std.io.getStdOut().writer();
 
 pub fn initialize_buffer() [1000]u8 {
@@ -22,6 +23,14 @@ pub fn main() !void {
     var buffer = initialize_buffer();
     try req.read_request(connection, &buffer);
     const request = req.parse_request(&buffer);
+
+    if (request.method == req.Method.GET) {
+        if (std.mem.eql(u8, request.uri, "/")) {
+            try res.send_200(connection);
+        } else {
+            try res.send_404(connection);
+        }
+    }
 
     try stdout.print("{any}\n", .{request});
 }
