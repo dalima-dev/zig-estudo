@@ -9,14 +9,14 @@ typedef struct Base64
     int (*char_index)(const struct Base64 *, char);
 } Base64;
 
-const char BASE64_TABLE[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const char TABLE[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-char base64_char_at(const Base64 *b64, int index)
+char char_at(const Base64 *b64, int index)
 {
     return b64->table[index];
 }
 
-int base64_char_index(const Base64 *b64, char c)
+int char_index(const Base64 *b64, char c)
 {
     if (c == '=')
         return 64;
@@ -28,11 +28,11 @@ int base64_char_index(const Base64 *b64, char c)
     return -1;
 }
 
-void base64_init(Base64 *b64)
+void init(Base64 *b64)
 {
-    b64->table = BASE64_TABLE;
-    b64->char_at = base64_char_at;
-    b64->char_index = base64_char_index;
+    b64->table = TABLE;
+    b64->char_at = char_at;
+    b64->char_index = char_index;
 }
 
 size_t calc_encode_length(size_t input_len)
@@ -47,7 +47,7 @@ size_t calc_decode_length(const char *input)
     return (len / 4) * 3 - padding;
 }
 
-char *base64_encode(const Base64 *b64, const char *input)
+char *encode(const Base64 *b64, const char *input)
 {
     size_t input_len = strlen(input);
     size_t output_len = calc_encode_length(input_len);
@@ -73,7 +73,7 @@ char *base64_encode(const Base64 *b64, const char *input)
     return output;
 }
 
-char *base64_decode(const Base64 *b64, const char *input)
+char *decode(const Base64 *b64, const char *input)
 {
     size_t input_len = strlen(input);
     size_t output_len = calc_decode_length(input);
@@ -103,13 +103,13 @@ char *base64_decode(const Base64 *b64, const char *input)
 int main()
 {
     Base64 base64;
-    base64_init(&base64);
+    init(&base64);
 
     const char *text = "Testing some more shit";
     const char *encoded_text = "VGVzdGluZyBzb21lIG1vcmUgc2hpdA==";
 
-    char *encoded = base64_encode(&base64, text);
-    char *decoded = base64_decode(&base64, encoded_text);
+    char *encoded = encode(&base64, text);
+    char *decoded = decode(&base64, encoded_text);
 
     printf("Encoded text: %s\n", encoded);
     printf("Decoded text: %s\n", decoded);
