@@ -4,7 +4,7 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
     const exe = b.addExecutable(.{
         .name = "image_filter",
-        .root_source_file = b.path("src/image_filter.zig"),
+        .root_source_file = b.path("image_filter.zig"),
         .target = target,
         .optimize = optimize,
     });
