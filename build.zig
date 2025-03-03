@@ -26,13 +26,7 @@ const project_3 = Exercise{
     .run = "project-3",
     .description = "Executa projeto 3",
 };
-const project_4 = Exercise{
-    .name = "project-4",
-    .file_name = "src/project-4.zig",
-    .run = "project-4",
-    .description = "Executa projeto 4",
-};
-const exercises = [_]Exercise{ project_1, project_2, project_3, project_4 };
+const exercises = [_]Exercise{ project_1, project_2, project_3 };
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
