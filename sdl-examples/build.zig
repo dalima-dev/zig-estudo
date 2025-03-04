@@ -27,7 +27,6 @@ pub fn build(b: *std.Build) void {
             .optimize = optimize,
         });
 
-        exe.root_module.addAnonymousImport("shims", .{ .root_source_file = b.path("shims.zig") });
         exe.root_module.linkLibrary(sdl_lib);
         b.installArtifact(exe);
 
