@@ -15,7 +15,6 @@ pub fn main() !void {
 
     const window_w = 640;
     const window_h = 480;
-    _ = c.SDL_SetHint(c.SDL_HINT_RENDER_VSYNC, "1");
 
     const window: *c.SDL_Window, const renderer: *c.SDL_Renderer = create_window_and_renderer: {
         var window: ?*c.SDL_Window = null;
