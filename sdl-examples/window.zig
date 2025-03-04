@@ -31,9 +31,9 @@ pub fn main() !void {
 
     c.SDL_SetMainReady();
 
-    try errify(c.SDL_SetAppMetadata("Window", "0.0.0", "sdl-examples.window"));
+    _ = c.SDL_SetAppMetadata("Window", "0.0.0", "sdl-examples.window");
 
-    try errify(c.SDL_Init(c.SDL_INIT_VIDEO | c.SDL_INIT_AUDIO | c.SDL_INIT_GAMEPAD));
+    _ = c.SDL_Init(c.SDL_INIT_VIDEO | c.SDL_INIT_AUDIO | c.SDL_INIT_GAMEPAD);
     defer c.SDL_Quit();
 
     std.log.debug("SDL video drivers: {}", .{fmtSdlDrivers(
@@ -49,12 +49,12 @@ pub fn main() !void {
 
     const window_w = 640;
     const window_h = 480;
-    errify(c.SDL_SetHint(c.SDL_HINT_RENDER_VSYNC, "1")) catch {};
+    _ = c.SDL_SetHint(c.SDL_HINT_RENDER_VSYNC, "1");
 
     const window: *c.SDL_Window, const renderer: *c.SDL_Renderer = create_window_and_renderer: {
         var window: ?*c.SDL_Window = null;
         var renderer: ?*c.SDL_Renderer = null;
-        try errify(c.SDL_CreateWindowAndRenderer("Speedbreaker", window_w, window_h, 0, &window, &renderer));
+        _ = c.SDL_CreateWindowAndRenderer("Speedbreaker", window_w, window_h, 0, &window, &renderer);
         errdefer comptime unreachable;
 
         break :create_window_and_renderer .{ window.?, renderer.? };
@@ -75,16 +75,16 @@ pub fn main() !void {
             if (event.type == c.SDL_EVENT_QUIT) break :main_loop;
         }
 
-        try errify(c.SDL_SetRenderDrawColor(renderer, 0x47, 0x5b, 0x8d, 0xff));
-        try errify(c.SDL_RenderClear(renderer));
+        _ = c.SDL_SetRenderDrawColor(renderer, 0x47, 0x5b, 0x8d, 0xff);
+        _ = c.SDL_RenderClear(renderer);
 
-        try errify(c.SDL_SetRenderScale(renderer, 2, 2));
+        _ = c.SDL_SetRenderScale(renderer, 2, 2);
         {
-            try errify(c.SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff));
+            _ = c.SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
         }
-        try errify(c.SDL_SetRenderScale(renderer, 1, 1));
+        _ = c.SDL_SetRenderScale(renderer, 1, 1);
 
-        try errify(c.SDL_RenderPresent(renderer));
+        _ = c.SDL_RenderPresent(renderer);
     }
 }
 
@@ -121,25 +121,4 @@ fn formatSdlDrivers(
             try writer.writeAll(" (current)");
         }
     }
-}
-
-/// Converts the return value of an SDL function to an error union.
-inline fn errify(value: anytype) error{SdlError}!switch (@import("shims").typeInfo(@TypeOf(value))) {
-    .bool => void,
-    .pointer, .optional => @TypeOf(value.?),
-    .int => |info| switch (info.signedness) {
-        .signed => @TypeOf(@max(0, value)),
-        .unsigned => @TypeOf(value),
-    },
-    else => @compileError("unerrifiable type: " ++ @typeName(@TypeOf(value))),
-} {
-    return switch (@import("shims").typeInfo(@TypeOf(value))) {
-        .bool => if (!value) error.SdlError,
-        .pointer, .optional => value orelse error.SdlError,
-        .int => |info| switch (info.signedness) {
-            .signed => if (value >= 0) @max(0, value) else error.SdlError,
-            .unsigned => if (value != 0) value else error.SdlError,
-        },
-        else => comptime unreachable,
-    };
 }
