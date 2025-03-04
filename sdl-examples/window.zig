@@ -10,7 +10,7 @@ pub fn main() !void {
 
     _ = c.SDL_SetAppMetadata("Window", "0.0.0", "sdl-examples.window");
 
-    _ = c.SDL_Init(c.SDL_INIT_VIDEO | c.SDL_INIT_AUDIO | c.SDL_INIT_GAMEPAD);
+    _ = c.SDL_Init(c.SDL_INIT_VIDEO);
     defer c.SDL_Quit();
 
     const window_w = 640;
