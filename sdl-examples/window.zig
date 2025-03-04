@@ -30,6 +30,7 @@ pub fn main() !void {
     main_loop: while (true) {
         var event: c.SDL_Event = undefined;
         var timeoutMS: i32 = -1;
+
         while (c.SDL_WaitEventTimeout(&event, timeoutMS)) : (timeoutMS = 0) {
             if (event.type == c.SDL_EVENT_QUIT) break :main_loop;
         }
