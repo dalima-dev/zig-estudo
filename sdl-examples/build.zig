@@ -7,7 +7,14 @@ pub const Example = struct {
     description: []const u8,
 };
 
-const examples = [_]Example{};
+const window = Example{
+    .name = "window",
+    .path = "window.zig",
+    .run = "window",
+    .description = "Window example",
+};
+
+const examples = [_]Example{window};
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
