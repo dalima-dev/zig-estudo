@@ -14,7 +14,14 @@ const window = Example{
     .description = "Window example",
 };
 
-const examples = [_]Example{window};
+const clear = Example{
+    .name = "clear",
+    .path = "clear.zig",
+    .run = "clear",
+    .description = "Clear example",
+};
+
+const examples = [_]Example{ window, clear };
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
