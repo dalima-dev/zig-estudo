@@ -45,24 +45,29 @@ fn handleBallCollisionWithWall() void {
     const ball_position_x = ball.object.position.x;
     const ball_position_y = ball.object.position.y;
 
-    if (ball_position_x < 0 or ball_position_x > WINDOW_WIDTH - BALL_SIZE) {
-        ball.setVelocity(-ball.object.velocity.x, ball.object.velocity.y);
+    const left_collision = ball_position_x < 0;
+    const right_collision = ball_position_x > WINDOW_WIDTH - BALL_SIZE;
+    const top_collision = ball_position_y < 0;
+    const bottom_collision = ball_position_y > WINDOW_HEIGHT - BALL_SIZE;
 
-        if (ball_position_x < 0) {
-            ball.setPosition(0, ball_position_y);
-        } else {
-            ball.setPosition(WINDOW_WIDTH - BALL_SIZE, ball_position_y);
-        }
+    if (left_collision) {
+        ball.setVelocity(-ball.object.velocity.x, ball.object.velocity.y);
+        ball.setPosition(0, ball_position_y);
     }
 
-    if (ball_position_y < 0 or ball_position_y > WINDOW_HEIGHT - BALL_SIZE) {
-        ball.setVelocity(ball.object.velocity.x, -ball.object.velocity.y);
+    if (right_collision) {
+        ball.setVelocity(-ball.object.velocity.x, ball.object.velocity.y);
+        ball.setPosition(WINDOW_WIDTH - BALL_SIZE, ball_position_y);
+    }
 
-        if (ball_position_y < 0) {
-            ball.setPosition(ball_position_x, 0);
-        } else {
-            ball.setPosition(ball_position_x, WINDOW_HEIGHT - BALL_SIZE);
-        }
+    if (top_collision) {
+        ball.setVelocity(ball.object.velocity.x, -ball.object.velocity.y);
+        ball.setPosition(ball_position_x, 0);
+    }
+
+    if (bottom_collision) {
+        ball.setVelocity(ball.object.velocity.x, -ball.object.velocity.y);
+        ball.setPosition(ball_position_x, WINDOW_HEIGHT - BALL_SIZE);
     }
 }
 
