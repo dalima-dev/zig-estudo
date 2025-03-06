@@ -41,10 +41,40 @@ fn initializeAppState() void {
     ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, 100, 100);
 }
 
-fn updateBallPosition() void {
+fn handleBallCollisionWithWall() void {
+    const ball_position_x = ball.object.position.x;
+    const ball_position_y = ball.object.position.y;
+
+    if (ball_position_x < 0 or ball_position_x > WINDOW_WIDTH - BALL_SIZE) {
+        ball.setVelocity(-ball.object.velocity.x, ball.object.velocity.y);
+
+        if (ball_position_x < 0) {
+            ball.setPosition(0, ball_position_y);
+        } else {
+            ball.setPosition(WINDOW_WIDTH - BALL_SIZE, ball_position_y);
+        }
+    }
+
+    if (ball_position_y < 0 or ball_position_y > WINDOW_HEIGHT - BALL_SIZE) {
+        ball.setVelocity(ball.object.velocity.x, -ball.object.velocity.y);
+
+        if (ball_position_y < 0) {
+            ball.setPosition(ball_position_x, 0);
+        } else {
+            ball.setPosition(ball_position_x, WINDOW_HEIGHT - BALL_SIZE);
+        }
+    }
+}
+
+fn updateBallPositionByElapsedTime() void {
     const ball_position_x = ball.object.position.x + ball.object.velocity.x * elapsed_time;
     const ball_position_y = ball.object.position.y + ball.object.velocity.y * elapsed_time;
     ball.setPosition(ball_position_x, ball_position_y);
+}
+
+fn updateBallState() void {
+    updateBallPositionByElapsedTime();
+    handleBallCollisionWithWall();
 }
 
 fn updateAppState() void {
@@ -52,7 +82,7 @@ fn updateAppState() void {
     elapsed_time = @as(f32, @floatFromInt(current_time - last_time)) / 1000;
 
     // update objects here...
-    updateBallPosition();
+    updateBallState();
 
     last_time = c.SDL_GetTicks();
 }
