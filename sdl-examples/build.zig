@@ -35,7 +35,14 @@ const lines = Example{
     .description = "Lines example",
 };
 
-const examples = [_]Example{ window, clear, primitives, lines };
+const points = Example{
+    .name = "points",
+    .path = "points.zig",
+    .run = "points",
+    .description = "Points example",
+};
+
+const examples = [_]Example{ window, clear, primitives, lines, points };
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
