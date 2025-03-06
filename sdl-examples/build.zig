@@ -28,7 +28,14 @@ const primitives = Example{
     .description = "Primitives example",
 };
 
-const examples = [_]Example{ window, clear, primitives };
+const lines = Example{
+    .name = "lines",
+    .path = "lines.zig",
+    .run = "lines",
+    .description = "Lines example",
+};
+
+const examples = [_]Example{ window, clear, primitives, lines };
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
