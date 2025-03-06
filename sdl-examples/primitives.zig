@@ -37,7 +37,7 @@ fn generateSeed() !u64 {
 
 pub fn initializePoints() !void {
     const seed = try generateSeed();
-    var prng = std.rand.DefaultPrng.init(seed);
+    var prng = std.Random.DefaultPrng.init(seed);
     const rand = prng.random();
 
     for (&points) |*point| {
