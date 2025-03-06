@@ -21,7 +21,14 @@ const clear = Example{
     .description = "Clear example",
 };
 
-const examples = [_]Example{ window, clear };
+const primitives = Example{
+    .name = "primitives",
+    .path = "primitives.zig",
+    .run = "primitives",
+    .description = "Primitives example",
+};
+
+const examples = [_]Example{ window, clear, primitives };
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
