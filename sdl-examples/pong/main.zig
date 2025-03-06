@@ -12,8 +12,9 @@ var last_time: u64 = 0;
 var current_time: u64 = 0;
 var elapsed_time: f32 = 0;
 
+// declare objects here...
 const BALL_SIZE = 10;
-const ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, 100, 100);
+var ball: Ball = undefined;
 
 pub fn createWindownAndRenderer() struct { *c.SDL_Window, *c.SDL_Renderer } {
     c.SDL_SetMainReady();
@@ -37,6 +38,13 @@ fn initializeAppState() void {
     last_time = c.SDL_GetTicks();
 
     // initialize objects here...
+    ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, 100, 100);
+}
+
+fn updateBallPosition() void {
+    const ball_position_x = ball.object.position.x + ball.object.velocity.x * elapsed_time;
+    const ball_position_y = ball.object.position.y + ball.object.velocity.y * elapsed_time;
+    ball.setPosition(ball_position_x, ball_position_y);
 }
 
 fn updateAppState() void {
@@ -44,6 +52,7 @@ fn updateAppState() void {
     elapsed_time = @as(f32, @floatFromInt(current_time - last_time)) / 1000;
 
     // update objects here...
+    updateBallPosition();
 
     last_time = c.SDL_GetTicks();
 }
@@ -113,7 +122,20 @@ const Ball = struct {
         };
     }
 
-    pub fn draw(self: Ball, renderer: ?*c.SDL_Renderer) void {
+    pub fn setPosition(self: *Ball, x: f32, y: f32) void {
+        self.object.position.x = x;
+        self.object.position.y = y;
+
+        self.shape.x = x;
+        self.shape.y = y;
+    }
+
+    pub fn setVelocity(self: *Ball, x: f32, y: f32) void {
+        self.object.velocity.x = x;
+        self.object.velocity.y = y;
+    }
+
+    pub fn draw(self: *Ball, renderer: ?*c.SDL_Renderer) void {
         const rect = self.shape;
         _ = c.SDL_SetRenderDrawColor(renderer, 255, 255, 255, c.SDL_ALPHA_OPAQUE);
         _ = c.SDL_RenderFillRect(renderer, &rect);
