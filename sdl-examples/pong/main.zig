@@ -38,7 +38,7 @@ fn initializeAppState() void {
     last_time = c.SDL_GetTicks();
 
     // initialize objects here...
-    ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, 100, 100);
+    ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, 300, 300);
 }
 
 fn handleBallCollisionWithWall() void {
