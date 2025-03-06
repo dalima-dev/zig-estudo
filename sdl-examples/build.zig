@@ -49,7 +49,14 @@ const debug_text = Example{
     .description = "Debug text example",
 };
 
-const examples = [_]Example{ window, clear, primitives, lines, points, debug_text };
+const simple_playback = Example{
+    .name = "simple-playback",
+    .path = "simple-playback.zig",
+    .run = "simple-playback",
+    .description = "Simple playback example",
+};
+
+const examples = [_]Example{ window, clear, primitives, lines, points, debug_text, simple_playback };
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
