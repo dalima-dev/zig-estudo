@@ -5,13 +5,6 @@ const c = @cImport({
     @cInclude("SDL3/SDL_main.h");
 });
 
-fn generateSeed() !u64 {
-    var seed: u64 = undefined;
-    try std.posix.getrandom(std.mem.asBytes(&seed));
-
-    return seed;
-}
-
 const WINDOW_WIDTH = 640;
 const WINDOW_HEIGHT = 480;
 
@@ -33,6 +26,13 @@ pub fn createWindownAndRenderer() struct { *c.SDL_Window, *c.SDL_Renderer } {
     };
 
     return .{ window, renderer };
+}
+
+fn generateSeed() !u64 {
+    var seed: u64 = undefined;
+    try std.posix.getrandom(std.mem.asBytes(&seed));
+
+    return seed;
 }
 
 pub fn initializePoints() !void {
