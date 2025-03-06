@@ -42,7 +42,14 @@ const points = Example{
     .description = "Points example",
 };
 
-const examples = [_]Example{ window, clear, primitives, lines, points };
+const debug_text = Example{
+    .name = "debug-text",
+    .path = "debug-text.zig",
+    .run = "debug-text",
+    .description = "Debug text example",
+};
+
+const examples = [_]Example{ window, clear, primitives, lines, points, debug_text };
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
