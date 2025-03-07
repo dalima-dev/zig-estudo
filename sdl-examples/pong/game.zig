@@ -5,6 +5,7 @@ const c = @cImport({
 
 const objects = @import("objects.zig");
 const Ball = objects.Ball;
+const Player = objects.Player;
 
 pub const WINDOW_WIDTH = 640;
 pub const WINDOW_HEIGHT = 480;
@@ -16,6 +17,11 @@ pub var elapsed_time: f32 = 0;
 const BALL_SIZE = objects.BALL_SIZE;
 const BALL_SPEED = 300;
 pub var ball: Ball = undefined;
+
+const PLAYER_WIDTH = objects.PLAYER_WIDTH;
+const PLAYER_HEIGHT = objects.PLAYER_HEIGHT;
+pub var player_one: Player = undefined;
+pub var player_two: Player = undefined;
 
 pub fn handleBallCollisionWithWall() void {
     const ball_position_x = ball.object.position.x;
@@ -60,6 +66,8 @@ pub fn updateBallState() void {
 
 pub fn initialize() void {
     ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, BALL_SPEED, BALL_SPEED);
+    player_one = Player.init(10, (WINDOW_HEIGHT - PLAYER_HEIGHT) / 2, 0, 0);
+    player_two = Player.init(WINDOW_WIDTH - PLAYER_WIDTH - 10, (WINDOW_HEIGHT - PLAYER_HEIGHT) / 2, 0, 0);
 }
 
 pub fn update() void {
@@ -68,6 +76,8 @@ pub fn update() void {
 
 pub fn draw(renderer: ?*c.SDL_Renderer) void {
     ball.draw(renderer);
+    player_one.draw(renderer);
+    player_two.draw(renderer);
 }
 
 pub fn handleEvent(event: c.SDL_Event) !void {
