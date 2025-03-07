@@ -14,6 +14,7 @@ pub var current_time: u64 = 0;
 pub var elapsed_time: f32 = 0;
 
 const BALL_SIZE = objects.BALL_SIZE;
+const BALL_SPEED = 300;
 pub var ball: Ball = undefined;
 
 pub fn handleBallCollisionWithWall() void {
@@ -58,7 +59,7 @@ pub fn updateBallState() void {
 }
 
 pub fn initialize() void {
-    ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, 300, 300);
+    ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, BALL_SPEED, BALL_SPEED);
 }
 
 pub fn update() void {
