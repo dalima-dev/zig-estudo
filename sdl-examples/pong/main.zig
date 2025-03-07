@@ -1,11 +1,9 @@
-const std = @import("std");
-
 const c = @cImport({
     @cInclude("SDL3/SDL.h");
     @cInclude("SDL3/SDL_main.h");
 });
-
 const engine = @import("engine.zig");
+
 const WINDOW_WIDTH = engine.WINDOW_WIDTH;
 const WINDOW_HEIGHT = engine.WINDOW_HEIGHT;
 
