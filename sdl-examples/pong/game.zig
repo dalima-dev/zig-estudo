@@ -13,20 +13,20 @@ pub var last_time: u64 = 0;
 pub var current_time: u64 = 0;
 pub var elapsed_time: f32 = 0;
 
-pub const BALL_SIZE = 10;
-pub const Ball = Object(BALL_SIZE, BALL_SIZE);
-
+const BALL_SIZE = 10;
 const BALL_SPEED = 300;
-pub var ball: Ball = undefined;
 
-pub const PLAYER_WIDTH = 10;
-pub const PLAYER_HEIGHT = 50;
-pub const Player = Object(PLAYER_WIDTH, PLAYER_HEIGHT);
+const PLAYER_WIDTH = 10;
+const PLAYER_HEIGHT = 50;
 
-pub var player_one: Player = undefined;
-pub var player_two: Player = undefined;
+const Ball = Object(BALL_SIZE, BALL_SIZE);
+const Player = Object(PLAYER_WIDTH, PLAYER_HEIGHT);
 
-pub fn handleBallCollisionWithWall() void {
+var ball: Ball = undefined;
+var player_one: Player = undefined;
+var player_two: Player = undefined;
+
+fn handleBallCollisionWithWall() void {
     const ball_position_x = ball.position.x;
     const ball_position_y = ball.position.y;
 
@@ -56,13 +56,13 @@ pub fn handleBallCollisionWithWall() void {
     }
 }
 
-pub fn updateBallPositionByElapsedTime() void {
+fn updateBallPositionByElapsedTime() void {
     const ball_position_x = ball.position.x + ball.velocity.x * elapsed_time;
     const ball_position_y = ball.position.y + ball.velocity.y * elapsed_time;
     ball.setPosition(ball_position_x, ball_position_y);
 }
 
-pub fn updateBallState() void {
+fn updateBallState() void {
     updateBallPositionByElapsedTime();
     handleBallCollisionWithWall();
 }
