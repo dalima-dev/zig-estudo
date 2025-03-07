@@ -14,13 +14,13 @@ var elapsed_time_ptr: *f32 = &game.elapsed_time;
 pub fn createWindownAndRenderer() struct { *c.SDL_Window, *c.SDL_Renderer } {
     c.SDL_SetMainReady();
 
-    _ = c.SDL_SetAppMetadata("Points", "0.0.0", "sdl-examples.points");
+    _ = c.SDL_SetAppMetadata("Pong", "0.0.0", "sdl-examples.pong");
     _ = c.SDL_Init(c.SDL_INIT_VIDEO);
 
     const window: *c.SDL_Window, const renderer: *c.SDL_Renderer = create_window_and_renderer: {
         var window: ?*c.SDL_Window = null;
         var renderer: ?*c.SDL_Renderer = null;
-        _ = c.SDL_CreateWindowAndRenderer("Window", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
+        _ = c.SDL_CreateWindowAndRenderer("Pong", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer);
         errdefer comptime unreachable;
 
         break :create_window_and_renderer .{ window.?, renderer.? };
