@@ -2,14 +2,14 @@ const c = @cImport({
     @cInclude("SDL3/SDL.h");
     @cInclude("SDL3/SDL_main.h");
 });
-const engine = @import("engine.zig");
+const game = @import("game.zig");
 
-const WINDOW_WIDTH = engine.WINDOW_WIDTH;
-const WINDOW_HEIGHT = engine.WINDOW_HEIGHT;
+const WINDOW_WIDTH = game.WINDOW_WIDTH;
+const WINDOW_HEIGHT = game.WINDOW_HEIGHT;
 
-var last_time_ptr: *u64 = &engine.last_time;
-var current_time_ptr: *u64 = &engine.current_time;
-var elapsed_time_ptr: *f32 = &engine.elapsed_time;
+var last_time_ptr: *u64 = &game.last_time;
+var current_time_ptr: *u64 = &game.current_time;
+var elapsed_time_ptr: *f32 = &game.elapsed_time;
 
 pub fn createWindownAndRenderer() struct { *c.SDL_Window, *c.SDL_Renderer } {
     c.SDL_SetMainReady();
@@ -33,7 +33,7 @@ fn render(renderer: ?*c.SDL_Renderer) void {
     _ = c.SDL_SetRenderDrawColor(renderer, 0, 0, 0, c.SDL_ALPHA_OPAQUE);
     _ = c.SDL_RenderClear(renderer);
 
-    engine.draw(renderer);
+    game.draw(renderer);
 
     _ = c.SDL_RenderPresent(renderer);
 }
@@ -45,13 +45,13 @@ pub fn main() !void {
     defer c.SDL_DestroyWindow(window);
 
     last_time_ptr.* = c.SDL_GetTicks();
-    engine.initialize();
+    game.initialize();
 
     main_loop: while (true) {
         var event: c.SDL_Event = undefined;
 
         while (c.SDL_PollEvent(&event)) {
-            engine.handleEvent(event) catch |err| {
+            game.handleEvent(event) catch |err| {
                 if (err == error.Quit) break :main_loop;
             };
         }
@@ -59,7 +59,7 @@ pub fn main() !void {
         {
             current_time_ptr.* = c.SDL_GetTicks();
             elapsed_time_ptr.* = @as(f32, @floatFromInt(current_time_ptr.* - last_time_ptr.*)) / 1000;
-            engine.update();
+            game.update();
             last_time_ptr.* = c.SDL_GetTicks();
         }
 
