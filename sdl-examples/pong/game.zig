@@ -3,9 +3,8 @@ const c = @cImport({
     @cInclude("SDL3/SDL_main.h");
 });
 
-const objects = @import("objects.zig");
-const Ball = objects.Ball;
-const Player = objects.Player;
+const object = @import("object.zig");
+const Object = object.Object;
 
 pub const WINDOW_WIDTH = 640;
 pub const WINDOW_HEIGHT = 480;
@@ -14,18 +13,22 @@ pub var last_time: u64 = 0;
 pub var current_time: u64 = 0;
 pub var elapsed_time: f32 = 0;
 
-const BALL_SIZE = objects.BALL_SIZE;
+pub const BALL_SIZE = 10;
+pub const Ball = Object(BALL_SIZE, BALL_SIZE);
+
 const BALL_SPEED = 300;
 pub var ball: Ball = undefined;
 
-const PLAYER_WIDTH = objects.PLAYER_WIDTH;
-const PLAYER_HEIGHT = objects.PLAYER_HEIGHT;
+pub const PLAYER_WIDTH = 10;
+pub const PLAYER_HEIGHT = 50;
+pub const Player = Object(PLAYER_WIDTH, PLAYER_HEIGHT);
+
 pub var player_one: Player = undefined;
 pub var player_two: Player = undefined;
 
 pub fn handleBallCollisionWithWall() void {
-    const ball_position_x = ball.object.position.x;
-    const ball_position_y = ball.object.position.y;
+    const ball_position_x = ball.position.x;
+    const ball_position_y = ball.position.y;
 
     const left_collision = ball_position_x < 0;
     const right_collision = ball_position_x > WINDOW_WIDTH - BALL_SIZE;
@@ -33,29 +36,29 @@ pub fn handleBallCollisionWithWall() void {
     const bottom_collision = ball_position_y > WINDOW_HEIGHT - BALL_SIZE;
 
     if (left_collision) {
-        ball.setVelocity(-ball.object.velocity.x, ball.object.velocity.y);
+        ball.setVelocity(-ball.velocity.x, ball.velocity.y);
         ball.setPosition(0, ball_position_y);
     }
 
     if (right_collision) {
-        ball.setVelocity(-ball.object.velocity.x, ball.object.velocity.y);
+        ball.setVelocity(-ball.velocity.x, ball.velocity.y);
         ball.setPosition(WINDOW_WIDTH - BALL_SIZE, ball_position_y);
     }
 
     if (top_collision) {
-        ball.setVelocity(ball.object.velocity.x, -ball.object.velocity.y);
+        ball.setVelocity(ball.velocity.x, -ball.velocity.y);
         ball.setPosition(ball_position_x, 0);
     }
 
     if (bottom_collision) {
-        ball.setVelocity(ball.object.velocity.x, -ball.object.velocity.y);
+        ball.setVelocity(ball.velocity.x, -ball.velocity.y);
         ball.setPosition(ball_position_x, WINDOW_HEIGHT - BALL_SIZE);
     }
 }
 
 pub fn updateBallPositionByElapsedTime() void {
-    const ball_position_x = ball.object.position.x + ball.object.velocity.x * elapsed_time;
-    const ball_position_y = ball.object.position.y + ball.object.velocity.y * elapsed_time;
+    const ball_position_x = ball.position.x + ball.velocity.x * elapsed_time;
+    const ball_position_y = ball.position.y + ball.velocity.y * elapsed_time;
     ball.setPosition(ball_position_x, ball_position_y);
 }
 
