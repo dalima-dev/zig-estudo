@@ -68,3 +68,7 @@ pub fn update() void {
 pub fn draw(renderer: ?*c.SDL_Renderer) void {
     ball.draw(renderer);
 }
+
+pub fn handleEvent(event: c.SDL_Event) !void {
+    if (event.type == c.SDL_EVENT_QUIT) return error.Quit;
+}

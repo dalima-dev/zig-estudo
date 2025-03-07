@@ -52,9 +52,10 @@ pub fn main() !void {
     main_loop: while (true) {
         var event: c.SDL_Event = undefined;
 
-        // implement a function to handle events here...
         while (c.SDL_PollEvent(&event)) {
-            if (event.type == c.SDL_EVENT_QUIT) break :main_loop;
+            engine.handleEvent(event) catch |err| {
+                if (err == error.Quit) break :main_loop;
+            };
         }
 
         {
