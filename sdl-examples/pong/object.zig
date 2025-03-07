@@ -46,9 +46,8 @@ pub fn Object(w: comptime_int, h: comptime_int) type {
         }
 
         pub fn draw(self: *@This(), renderer: ?*c.SDL_Renderer) void {
-            const rect = self.shape;
             _ = c.SDL_SetRenderDrawColor(renderer, 255, 255, 255, c.SDL_ALPHA_OPAQUE);
-            _ = c.SDL_RenderFillRect(renderer, &rect);
+            _ = c.SDL_RenderFillRect(renderer, &self.shape);
         }
     };
 }
