@@ -7,9 +7,9 @@ const game = @import("game.zig");
 const WINDOW_WIDTH = game.WINDOW_WIDTH;
 const WINDOW_HEIGHT = game.WINDOW_HEIGHT;
 
-var last_time_ptr: *u64 = &game.last_time;
-var current_time_ptr: *u64 = &game.current_time;
-var elapsed_time_ptr: *f32 = &game.elapsed_time;
+pub var last_time: u64 = 0;
+pub var current_time: u64 = 0;
+pub var elapsed_time: f32 = 0;
 
 pub fn createWindownAndRenderer() struct { *c.SDL_Window, *c.SDL_Renderer } {
     c.SDL_SetMainReady();
@@ -44,7 +44,7 @@ pub fn main() !void {
     defer c.SDL_DestroyRenderer(renderer);
     defer c.SDL_DestroyWindow(window);
 
-    last_time_ptr.* = c.SDL_GetTicks();
+    last_time = c.SDL_GetTicks();
     game.initialize();
 
     main_loop: while (true) {
@@ -57,10 +57,10 @@ pub fn main() !void {
         }
 
         {
-            current_time_ptr.* = c.SDL_GetTicks();
-            elapsed_time_ptr.* = @as(f32, @floatFromInt(current_time_ptr.* - last_time_ptr.*)) / 1000;
+            current_time = c.SDL_GetTicks();
+            elapsed_time = @as(f32, @floatFromInt(current_time - last_time)) / 1000;
             game.update();
-            last_time_ptr.* = c.SDL_GetTicks();
+            last_time = c.SDL_GetTicks();
         }
 
         render(renderer);

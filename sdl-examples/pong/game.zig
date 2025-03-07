@@ -1,3 +1,4 @@
+const main = @import("main.zig");
 const c = @cImport({
     @cInclude("SDL3/SDL.h");
     @cInclude("SDL3/SDL_main.h");
@@ -9,9 +10,7 @@ const Object = object.Object;
 pub const WINDOW_WIDTH = 640;
 pub const WINDOW_HEIGHT = 480;
 
-pub var last_time: u64 = 0;
-pub var current_time: u64 = 0;
-pub var elapsed_time: f32 = 0;
+var elapsed_time_ptr: *f32 = &main.elapsed_time;
 
 const BALL_SIZE = 10;
 const BALL_SPEED = 300;
@@ -57,8 +56,8 @@ fn handleBallCollisionWithWall() void {
 }
 
 fn updateBallPositionByElapsedTime() void {
-    const ball_position_x = ball.position.x + ball.velocity.x * elapsed_time;
-    const ball_position_y = ball.position.y + ball.velocity.y * elapsed_time;
+    const ball_position_x = ball.position.x + ball.velocity.x * elapsed_time_ptr.*;
+    const ball_position_y = ball.position.y + ball.velocity.y * elapsed_time_ptr.*;
     ball.setPosition(ball_position_x, ball_position_y);
 }
 
