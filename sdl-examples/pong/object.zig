@@ -45,6 +45,13 @@ pub fn Object(w: comptime_int, h: comptime_int) type {
             self.velocity.y = y;
         }
 
+        pub fn setPositionByElapsedTime(self: *@This(), elapsed_time: f32) void {
+            const x = self.position.x + self.velocity.x * elapsed_time;
+            const y = self.position.y + self.velocity.y * elapsed_time;
+
+            self.setPosition(x, y);
+        }
+
         pub fn draw(self: *@This(), renderer: ?*c.SDL_Renderer) void {
             _ = c.SDL_SetRenderDrawColor(renderer, 255, 255, 255, c.SDL_ALPHA_OPAQUE);
             _ = c.SDL_RenderFillRect(renderer, &self.shape);

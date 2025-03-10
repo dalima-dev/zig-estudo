@@ -58,12 +58,6 @@ fn handleBallCollisionWithWall() void {
     }
 }
 
-fn updateBallPositionByElapsedTime() void {
-    const ball_position_x = ball.position.x + ball.velocity.x * elapsed_time_ptr.*;
-    const ball_position_y = ball.position.y + ball.velocity.y * elapsed_time_ptr.*;
-    ball.setPosition(ball_position_x, ball_position_y);
-}
-
 fn handlePlayerCollisionWithWall(player: *Player) void {
     const player_position_x = player.position.x;
     const player_position_y = player.position.y;
@@ -78,12 +72,6 @@ fn handlePlayerCollisionWithWall(player: *Player) void {
     if (bottom_collision) {
         player.setPosition(player_position_x, WINDOW_HEIGHT - PLAYER_HEIGHT);
     }
-}
-
-fn updatePlayerPositionByElapsedTime(player: *Player) void {
-    const player_position_x = player.position.x + player.velocity.x * elapsed_time_ptr.*;
-    const player_position_y = player.position.y + player.velocity.y * elapsed_time_ptr.*;
-    player.setPosition(player_position_x, player_position_y);
 }
 
 fn controlPlayerState(player: *Player, up: bool, down: bool) void {
@@ -101,12 +89,13 @@ pub fn initialize() void {
 }
 
 pub fn update() void {
-    updateBallPositionByElapsedTime();
+    ball.setPositionByElapsedTime(elapsed_time_ptr.*);
     handleBallCollisionWithWall();
 
-    updatePlayerPositionByElapsedTime(&player_one);
+    player_one.setPositionByElapsedTime(elapsed_time_ptr.*);
     handlePlayerCollisionWithWall(&player_one);
-    updatePlayerPositionByElapsedTime(&player_two);
+
+    player_two.setPositionByElapsedTime(elapsed_time_ptr.*);
     handlePlayerCollisionWithWall(&player_two);
 
     controlPlayerState(&player_one, controller_state.key_w, controller_state.key_s);
