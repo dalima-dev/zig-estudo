@@ -83,13 +83,13 @@ pub fn initialize() void {
 }
 
 pub fn update() void {
-    ball.setPositionByElapsedTime(elapsed_time_ptr.*);
+    ball.updatePositionByTime(elapsed_time_ptr.*);
     handleBallCollisionWithWall();
 
-    player_one.setPositionByElapsedTime(elapsed_time_ptr.*);
+    player_one.updatePositionByTime(elapsed_time_ptr.*);
     handlePlayerCollisionWithWall(&player_one);
 
-    player_two.setPositionByElapsedTime(elapsed_time_ptr.*);
+    player_two.updatePositionByTime(elapsed_time_ptr.*);
     handlePlayerCollisionWithWall(&player_two);
 
     controlPlayerState(&player_one, controller_state.key_w, controller_state.key_s);
