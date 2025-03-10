@@ -7,6 +7,9 @@ const c = @cImport({
 const object = @import("object.zig");
 const Object = object.Object;
 
+const controller = @import("controller.zig");
+var controller_state: controller.ControllerState = .{};
+
 pub const WINDOW_WIDTH = 640;
 pub const WINDOW_HEIGHT = 480;
 
@@ -61,9 +64,34 @@ fn updateBallPositionByElapsedTime() void {
     ball.setPosition(ball_position_x, ball_position_y);
 }
 
-fn updateBallState() void {
-    updateBallPositionByElapsedTime();
-    handleBallCollisionWithWall();
+fn handlePlayerCollisionWithWall(player: *Player) void {
+    const player_position_x = player.position.x;
+    const player_position_y = player.position.y;
+
+    const top_collision = player_position_y < 0;
+    const bottom_collision = player_position_y > WINDOW_HEIGHT - PLAYER_HEIGHT;
+
+    if (top_collision) {
+        player.setPosition(player_position_x, 0);
+    }
+
+    if (bottom_collision) {
+        player.setPosition(player_position_x, WINDOW_HEIGHT - PLAYER_HEIGHT);
+    }
+}
+
+fn updatePlayerPositionByElapsedTime(player: *Player) void {
+    const player_position_x = player.position.x + player.velocity.x * elapsed_time_ptr.*;
+    const player_position_y = player.position.y + player.velocity.y * elapsed_time_ptr.*;
+    player.setPosition(player_position_x, player_position_y);
+}
+
+fn controlPlayerState(player: *Player, up: bool, down: bool) void {
+    var player_vel_y: f32 = 0;
+    if (up) player_vel_y -= 400;
+    if (down) player_vel_y += 400;
+
+    player.setVelocity(0, player_vel_y);
 }
 
 pub fn initialize() void {
@@ -73,7 +101,16 @@ pub fn initialize() void {
 }
 
 pub fn update() void {
-    updateBallState();
+    updateBallPositionByElapsedTime();
+    handleBallCollisionWithWall();
+
+    updatePlayerPositionByElapsedTime(&player_one);
+    handlePlayerCollisionWithWall(&player_one);
+    updatePlayerPositionByElapsedTime(&player_two);
+    handlePlayerCollisionWithWall(&player_two);
+
+    controlPlayerState(&player_one, controller_state.key_w, controller_state.key_s);
+    controlPlayerState(&player_two, controller_state.key_o, controller_state.key_k);
 }
 
 pub fn draw(renderer: ?*c.SDL_Renderer) void {
@@ -83,5 +120,20 @@ pub fn draw(renderer: ?*c.SDL_Renderer) void {
 }
 
 pub fn handleEvent(event: c.SDL_Event) !void {
-    if (event.type == c.SDL_EVENT_QUIT) return error.Quit;
+    switch (event.type) {
+        c.SDL_EVENT_QUIT => {
+            return error.Quit;
+        },
+        c.SDL_EVENT_KEY_DOWN, c.SDL_EVENT_KEY_UP => {
+            const down = event.type == c.SDL_EVENT_KEY_DOWN;
+            switch (event.key.scancode) {
+                c.SDL_SCANCODE_W => controller_state.key_w = down,
+                c.SDL_SCANCODE_S => controller_state.key_s = down,
+                c.SDL_SCANCODE_O => controller_state.key_o = down,
+                c.SDL_SCANCODE_K => controller_state.key_k = down,
+                else => {},
+            }
+        },
+        else => {},
+    }
 }
