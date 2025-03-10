@@ -63,14 +63,14 @@ fn handlePlayerCollisionWithWall(player: *Player) void {
     const player_position_y = player.position.y;
 
     const top_collision = player_position_y < 0;
-    const bottom_collision = player_position_y > WINDOW_HEIGHT - PLAYER_HEIGHT;
+    const bottom_collision = player_position_y > WINDOW_HEIGHT - player.shape.h;
 
     if (top_collision) {
         player.setPosition(player_position_x, 0);
     }
 
     if (bottom_collision) {
-        player.setPosition(player_position_x, WINDOW_HEIGHT - PLAYER_HEIGHT);
+        player.setPosition(player_position_x, WINDOW_HEIGHT - player.shape.h);
     }
 }
 
