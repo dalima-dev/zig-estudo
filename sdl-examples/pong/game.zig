@@ -7,9 +7,6 @@ const c = @cImport({
 const object = @import("object.zig");
 const Object = object.Object;
 
-const controller = @import("controller.zig");
-var controller_state: controller.ControllerState = .{};
-
 pub const WINDOW_WIDTH = 640;
 pub const WINDOW_HEIGHT = 480;
 
@@ -27,6 +24,9 @@ const Player = Object(PLAYER_WIDTH, PLAYER_HEIGHT);
 var ball: Ball = undefined;
 var player_one: Player = undefined;
 var player_two: Player = undefined;
+
+const controller = @import("controller.zig");
+var controller_state: controller.ControllerState = .{};
 
 fn handleBallCollisionWithWall() void {
     const ball_position_x = ball.position.x;
