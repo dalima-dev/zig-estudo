@@ -29,32 +29,29 @@ const controller = @import("controller.zig");
 var controller_state: controller.ControllerState = .{};
 
 fn handleBallCollisionWithWall() void {
-    const ball_position_x = ball.position.x;
-    const ball_position_y = ball.position.y;
-
-    const left_collision = ball_position_x < 0;
-    const right_collision = ball_position_x > WINDOW_WIDTH - BALL_SIZE;
-    const top_collision = ball_position_y < 0;
-    const bottom_collision = ball_position_y > WINDOW_HEIGHT - BALL_SIZE;
+    const left_collision = ball.position.x < 0;
+    const right_collision = ball.position.x > WINDOW_WIDTH - BALL_SIZE;
+    const top_collision = ball.position.y < 0;
+    const bottom_collision = ball.position.y > WINDOW_HEIGHT - BALL_SIZE;
 
     if (left_collision) {
         ball.setVelocity(-ball.velocity.x, ball.velocity.y);
-        ball.setPosition(0, ball_position_y);
+        ball.setPosition(0, ball.position.y);
     }
 
     if (right_collision) {
         ball.setVelocity(-ball.velocity.x, ball.velocity.y);
-        ball.setPosition(WINDOW_WIDTH - BALL_SIZE, ball_position_y);
+        ball.setPosition(WINDOW_WIDTH - BALL_SIZE, ball.position.y);
     }
 
     if (top_collision) {
         ball.setVelocity(ball.velocity.x, -ball.velocity.y);
-        ball.setPosition(ball_position_x, 0);
+        ball.setPosition(ball.position.x, 0);
     }
 
     if (bottom_collision) {
         ball.setVelocity(ball.velocity.x, -ball.velocity.y);
-        ball.setPosition(ball_position_x, WINDOW_HEIGHT - BALL_SIZE);
+        ball.setPosition(ball.position.x, WINDOW_HEIGHT - BALL_SIZE);
     }
 }
 
