@@ -30,9 +30,9 @@ var controller_state: controller.ControllerState = .{};
 
 fn handleBallCollisionWithWall() void {
     const left_collision = ball.position.x < 0;
-    const right_collision = ball.position.x > WINDOW_WIDTH - BALL_SIZE;
+    const right_collision = ball.position.x > WINDOW_WIDTH - ball.shape.w;
     const top_collision = ball.position.y < 0;
-    const bottom_collision = ball.position.y > WINDOW_HEIGHT - BALL_SIZE;
+    const bottom_collision = ball.position.y > WINDOW_HEIGHT - ball.shape.h;
 
     if (left_collision) {
         ball.setVelocity(-ball.velocity.x, ball.velocity.y);
@@ -41,7 +41,7 @@ fn handleBallCollisionWithWall() void {
 
     if (right_collision) {
         ball.setVelocity(-ball.velocity.x, ball.velocity.y);
-        ball.setPosition(WINDOW_WIDTH - BALL_SIZE, ball.position.y);
+        ball.setPosition(WINDOW_WIDTH - ball.shape.w, ball.position.y);
     }
 
     if (top_collision) {
@@ -51,7 +51,7 @@ fn handleBallCollisionWithWall() void {
 
     if (bottom_collision) {
         ball.setVelocity(ball.velocity.x, -ball.velocity.y);
-        ball.setPosition(ball.position.x, WINDOW_HEIGHT - BALL_SIZE);
+        ball.setPosition(ball.position.x, WINDOW_HEIGHT - ball.shape.h);
     }
 }
 
@@ -90,9 +90,9 @@ fn controlPlayerState(player: *Player, up: bool, down: bool) void {
 }
 
 pub fn initialize() void {
-    ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, BALL_SPEED, BALL_SPEED);
-    player_one = Player.init(10, (WINDOW_HEIGHT - PLAYER_HEIGHT) / 2, 0, 0);
-    player_two = Player.init(WINDOW_WIDTH - PLAYER_WIDTH - 10, (WINDOW_HEIGHT - PLAYER_HEIGHT) / 2, 0, 0);
+    ball = Ball.init((WINDOW_WIDTH - ball.shape.w) / 2, (WINDOW_HEIGHT - ball.shape.h) / 2, BALL_SPEED, BALL_SPEED);
+    player_one = Player.init(10, (WINDOW_HEIGHT - player_one.shape.h) / 2, 0, 0);
+    player_two = Player.init(WINDOW_WIDTH - player_one.shape.w - 10, (WINDOW_HEIGHT - player_one.shape.h) / 2, 0, 0);
 }
 
 pub fn update() void {
