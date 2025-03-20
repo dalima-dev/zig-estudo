@@ -19,11 +19,11 @@ const PLAYER_WIDTH = 10;
 const PLAYER_HEIGHT = 50;
 
 const Ball = Object(BALL_SIZE, BALL_SIZE);
-const Player = Object(PLAYER_WIDTH, PLAYER_HEIGHT);
+const Paddle = Object(PLAYER_WIDTH, PLAYER_HEIGHT);
 
 var ball: Ball = undefined;
-var player_one: Player = undefined;
-var player_two: Player = undefined;
+var paddle_one: Paddle = undefined;
+var paddle_two: Paddle = undefined;
 
 const controller = @import("controller.zig");
 var controller_state: controller.ControllerState = .{};
@@ -55,25 +55,25 @@ fn handleBallCollisionWithWall() void {
     }
 }
 
-fn handlePlayerCollisionWithWall(player: *Player) void {
-    if (player.position.y < 0) {
-        player.setPosition(player.position.x, 0);
+fn handlePaddleCollisionWithWall(paddle: *Paddle) void {
+    if (paddle.position.y < 0) {
+        paddle.setPosition(paddle.position.x, 0);
     }
 
-    if (player.position.y > WINDOW_HEIGHT - player.shape.h) {
-        player.setPosition(player.position.x, WINDOW_HEIGHT - player.shape.h);
+    if (paddle.position.y > WINDOW_HEIGHT - paddle.shape.h) {
+        paddle.setPosition(paddle.position.x, WINDOW_HEIGHT - paddle.shape.h);
     }
 }
 
-fn isPlayerIntersectingBall(player: *Player) bool {
-    const min_x = ball.position.x - player.shape.w;
+fn isPaddleIntersectingBall(paddle: *Paddle) bool {
+    const min_x = ball.position.x - paddle.shape.w;
     const max_x = ball.position.x + ball.shape.w;
 
-    if (player.position.x > min_x and player.position.x < max_x) {
-        const min_y = ball.position.y - player.shape.h;
+    if (paddle.position.x > min_x and paddle.position.x < max_x) {
+        const min_y = ball.position.y - paddle.shape.h;
         const max_y = ball.position.y + ball.shape.h;
 
-        if (player.position.y > min_y and player.position.y < max_y) {
+        if (paddle.position.y > min_y and paddle.position.y < max_y) {
             return true;
         }
     }
@@ -81,38 +81,38 @@ fn isPlayerIntersectingBall(player: *Player) bool {
     return false;
 }
 
-fn controlPlayerState(player: *Player, up: bool, down: bool) void {
-    var player_vel_y: f32 = 0;
-    if (up) player_vel_y -= 400;
-    if (down) player_vel_y += 400;
+fn controlPaddleState(paddle: *Paddle, up: bool, down: bool) void {
+    var paddle_vel_y: f32 = 0;
+    if (up) paddle_vel_y -= 400;
+    if (down) paddle_vel_y += 400;
 
-    player.setVelocity(0, player_vel_y);
+    paddle.setVelocity(0, paddle_vel_y);
 }
 
 pub fn initialize() void {
     ball = Ball.init((WINDOW_WIDTH - ball.shape.w) / 2, (WINDOW_HEIGHT - ball.shape.h) / 2, BALL_SPEED, BALL_SPEED);
-    player_one = Player.init(10, (WINDOW_HEIGHT - player_one.shape.h) / 2, 0, 0);
-    player_two = Player.init(WINDOW_WIDTH - player_one.shape.w - 10, (WINDOW_HEIGHT - player_one.shape.h) / 2, 0, 0);
+    paddle_one = Paddle.init(10, (WINDOW_HEIGHT - paddle_one.shape.h) / 2, 0, 0);
+    paddle_two = Paddle.init(WINDOW_WIDTH - paddle_one.shape.w - 10, (WINDOW_HEIGHT - paddle_one.shape.h) / 2, 0, 0);
 }
 
 pub fn update() void {
     ball.updatePositionByTime(elapsed_time_ptr.*);
     handleBallCollisionWithWall();
 
-    player_one.updatePositionByTime(elapsed_time_ptr.*);
-    handlePlayerCollisionWithWall(&player_one);
+    paddle_one.updatePositionByTime(elapsed_time_ptr.*);
+    handlePaddleCollisionWithWall(&paddle_one);
 
-    player_two.updatePositionByTime(elapsed_time_ptr.*);
-    handlePlayerCollisionWithWall(&player_two);
+    paddle_two.updatePositionByTime(elapsed_time_ptr.*);
+    handlePaddleCollisionWithWall(&paddle_two);
 
-    controlPlayerState(&player_one, controller_state.key_w, controller_state.key_s);
-    controlPlayerState(&player_two, controller_state.key_o, controller_state.key_k);
+    controlPaddleState(&paddle_one, controller_state.key_w, controller_state.key_s);
+    controlPaddleState(&paddle_two, controller_state.key_o, controller_state.key_k);
 }
 
 pub fn draw(renderer: ?*c.SDL_Renderer) void {
     ball.draw(renderer);
-    player_one.draw(renderer);
-    player_two.draw(renderer);
+    paddle_one.draw(renderer);
+    paddle_two.draw(renderer);
 }
 
 pub fn handleEvent(event: c.SDL_Event) !void {
