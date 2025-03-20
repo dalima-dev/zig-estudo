@@ -65,6 +65,22 @@ fn handlePlayerCollisionWithWall(player: *Player) void {
     }
 }
 
+fn isPlayerIntersectingBall(player: *Player) bool {
+    const min_x = ball.position.x - player.shape.w;
+    const max_x = ball.position.x + ball.shape.w;
+
+    if (player.position.x > min_x and player.position.x < max_x) {
+        const min_y = ball.position.y - player.shape.h;
+        const max_y = ball.position.y + ball.shape.h;
+
+        if (player.position.y > min_y and player.position.y < max_y) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 fn controlPlayerState(player: *Player, up: bool, down: bool) void {
     var player_vel_y: f32 = 0;
     if (up) player_vel_y -= 400;
