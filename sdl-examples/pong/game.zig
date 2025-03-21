@@ -32,6 +32,16 @@ var controller_state: controller.ControllerState = .{};
 var score_one: u8 = 0;
 var score_two: u8 = 0;
 
+fn resetGameState() void {
+    std.time.sleep(2_000_000_000);
+    initialize();
+}
+
+fn countScore(score: *u8) void {
+    score.* += 1;
+    resetGameState();
+}
+
 fn handleBallCollisionWithWall() void {
     const left_collision = ball.position.x < 0;
     const right_collision = ball.position.x > WINDOW_WIDTH - ball.shape.w;
@@ -39,15 +49,11 @@ fn handleBallCollisionWithWall() void {
     const bottom_collision = ball.position.y > WINDOW_HEIGHT - ball.shape.h;
 
     if (left_collision) {
-        score_two += 1;
-        ball.velocity.x *= -1;
-        ball.setPosition(0, ball.position.y);
+        countScore(&score_two);
     }
 
     if (right_collision) {
-        score_one += 1;
-        ball.velocity.x *= -1;
-        ball.setPosition(WINDOW_WIDTH - ball.shape.w, ball.position.y);
+        countScore(&score_one);
     }
 
     if (top_collision) {
@@ -104,10 +110,12 @@ fn handleBallCollisionWithPaddle(paddle: *Paddle) void {
     }
 }
 
-fn handleScore() void {
+fn handleGameOver() void {
     if (score_one == 10 or score_two == 10) {
         score_one = 0;
         score_two = 0;
+
+        resetGameState();
     }
 }
 
@@ -148,7 +156,7 @@ pub fn update() void {
     handleBallCollisionWithPaddle(&paddle_one);
     handleBallCollisionWithPaddle(&paddle_two);
 
-    handleScore();
+    handleGameOver();
 
     controlPaddleState(&paddle_one, controller_state.key_w, controller_state.key_s);
     controlPaddleState(&paddle_two, controller_state.key_o, controller_state.key_k);
