@@ -65,7 +65,7 @@ fn handlePaddleCollisionWithWall(paddle: *Paddle) void {
     }
 }
 
-fn isPaddleIntersectingBall(paddle: *Paddle) bool {
+fn checkBallCollisionWithPaddle(paddle: *Paddle) bool {
     const min_x = ball.position.x - paddle.shape.w;
     const max_x = ball.position.x + ball.shape.w;
 
@@ -79,6 +79,20 @@ fn isPaddleIntersectingBall(paddle: *Paddle) bool {
     }
 
     return false;
+}
+
+fn handleBallCollisionWithPaddle(paddle: *Paddle) void {
+    if (checkBallCollisionWithPaddle(paddle)) {
+        ball.velocity.x = -ball.velocity.x;
+
+        if (ball.velocity.x > 0) {
+            if (ball.position.x <= paddle_one.position.x + paddle_one.shape.w) {
+                ball.position.x = paddle_one.position.x + paddle_one.shape.w;
+            }
+        } else if (ball.position.x >= paddle_two.position.x - ball.shape.w) {
+            ball.position.x = paddle_two.position.x - ball.shape.w;
+        }
+    }
 }
 
 fn controlPaddleState(paddle: *Paddle, up: bool, down: bool) void {
@@ -104,6 +118,9 @@ pub fn update() void {
 
     paddle_two.updatePositionByTime(elapsed_time_ptr.*);
     handlePaddleCollisionWithWall(&paddle_two);
+
+    handleBallCollisionWithPaddle(&paddle_one);
+    handleBallCollisionWithPaddle(&paddle_two);
 
     controlPaddleState(&paddle_one, controller_state.key_w, controller_state.key_s);
     controlPaddleState(&paddle_two, controller_state.key_o, controller_state.key_k);
