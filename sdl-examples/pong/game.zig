@@ -104,9 +104,9 @@ fn controlPaddleState(paddle: *Paddle, up: bool, down: bool) void {
 }
 
 pub fn initialize() void {
-    ball = Ball.init((WINDOW_WIDTH - ball.shape.w) / 2, (WINDOW_HEIGHT - ball.shape.h) / 2, BALL_SPEED, BALL_SPEED);
-    paddle_one = Paddle.init(10, (WINDOW_HEIGHT - paddle_one.shape.h) / 2, 0, 0);
-    paddle_two = Paddle.init(WINDOW_WIDTH - paddle_one.shape.w - 10, (WINDOW_HEIGHT - paddle_one.shape.h) / 2, 0, 0);
+    ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, BALL_SPEED, BALL_SPEED);
+    paddle_one = Paddle.init(10, (WINDOW_HEIGHT - PLAYER_HEIGHT) / 2, 0, 0);
+    paddle_two = Paddle.init(WINDOW_WIDTH - PLAYER_WIDTH - 10, (WINDOW_HEIGHT - PLAYER_HEIGHT) / 2, 0, 0);
 }
 
 pub fn update() void {
