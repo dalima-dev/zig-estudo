@@ -29,6 +29,8 @@ var paddle_two: Paddle = undefined;
 const controller = @import("controller.zig");
 var controller_state: controller.ControllerState = .{};
 
+var initial_ball_direction: i8 = 1;
+
 var score_one: u8 = 0;
 var score_two: u8 = 0;
 
@@ -138,7 +140,10 @@ fn controlPaddleState(paddle: *Paddle, up: bool, down: bool) void {
 }
 
 pub fn initialize() void {
-    ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, BALL_SPEED, BALL_SPEED);
+    initial_ball_direction *= -1;
+    const initial_ball_direction_f32: f32 = @floatFromInt(initial_ball_direction);
+
+    ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, BALL_SPEED * initial_ball_direction_f32, BALL_SPEED);
     paddle_one = Paddle.init(10, (WINDOW_HEIGHT - PADDLE_HEIGHT) / 2, 0, 0);
     paddle_two = Paddle.init(WINDOW_WIDTH - PADDLE_WIDTH - 10, (WINDOW_HEIGHT - PADDLE_HEIGHT) / 2, 0, 0);
 }
