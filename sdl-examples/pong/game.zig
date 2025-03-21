@@ -1,3 +1,4 @@
+const std = @import("std");
 const main = @import("main.zig");
 const c = @cImport({
     @cInclude("SDL3/SDL.h");
@@ -28,6 +29,9 @@ var paddle_two: Paddle = undefined;
 const controller = @import("controller.zig");
 var controller_state: controller.ControllerState = .{};
 
+var score_one: u8 = 0;
+var score_two: u8 = 0;
+
 fn handleBallCollisionWithWall() void {
     const left_collision = ball.position.x < 0;
     const right_collision = ball.position.x > WINDOW_WIDTH - ball.shape.w;
@@ -35,11 +39,13 @@ fn handleBallCollisionWithWall() void {
     const bottom_collision = ball.position.y > WINDOW_HEIGHT - ball.shape.h;
 
     if (left_collision) {
+        score_two += 1;
         ball.velocity.x *= -1;
         ball.setPosition(0, ball.position.y);
     }
 
     if (right_collision) {
+        score_one += 1;
         ball.velocity.x *= -1;
         ball.setPosition(WINDOW_WIDTH - ball.shape.w, ball.position.y);
     }
@@ -98,6 +104,23 @@ fn handleBallCollisionWithPaddle(paddle: *Paddle) void {
     }
 }
 
+fn handleScore() void {
+    if (score_one == 10 or score_two == 10) {
+        score_one = 0;
+        score_two = 0;
+    }
+}
+
+fn drawScore(renderer: ?*c.SDL_Renderer, score: u8, x: f32, y: f32) !void {
+    var buf: [10]u8 = undefined;
+    const text = try std.fmt.bufPrintZ(&buf, "SCORE {}", .{score});
+
+    _ = c.SDL_SetRenderScale(renderer, 2, 2);
+    _ = c.SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
+    _ = c.SDL_RenderDebugText(renderer, x, y, text.ptr);
+    _ = c.SDL_SetRenderScale(renderer, 1, 1);
+}
+
 fn controlPaddleState(paddle: *Paddle, up: bool, down: bool) void {
     var paddle_vel_y: f32 = 0;
     if (up) paddle_vel_y -= 400;
@@ -125,11 +148,15 @@ pub fn update() void {
     handleBallCollisionWithPaddle(&paddle_one);
     handleBallCollisionWithPaddle(&paddle_two);
 
+    handleScore();
+
     controlPaddleState(&paddle_one, controller_state.key_w, controller_state.key_s);
     controlPaddleState(&paddle_two, controller_state.key_o, controller_state.key_k);
 }
 
-pub fn draw(renderer: ?*c.SDL_Renderer) void {
+pub fn draw(renderer: ?*c.SDL_Renderer) !void {
+    try drawScore(renderer, score_one, 8, 8);
+    try drawScore(renderer, score_two, WINDOW_WIDTH - 383, 8);
     ball.draw(renderer);
     paddle_one.draw(renderer);
     paddle_two.draw(renderer);

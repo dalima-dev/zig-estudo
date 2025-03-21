@@ -29,11 +29,11 @@ pub fn createWindownAndRenderer() struct { *c.SDL_Window, *c.SDL_Renderer } {
     return .{ window, renderer };
 }
 
-fn render(renderer: ?*c.SDL_Renderer) void {
+fn render(renderer: ?*c.SDL_Renderer) !void {
     _ = c.SDL_SetRenderDrawColor(renderer, 0, 0, 0, c.SDL_ALPHA_OPAQUE);
     _ = c.SDL_RenderClear(renderer);
 
-    game.draw(renderer);
+    try game.draw(renderer);
 
     _ = c.SDL_RenderPresent(renderer);
 }
@@ -63,6 +63,6 @@ pub fn main() !void {
             last_time = c.SDL_GetTicks();
         }
 
-        render(renderer);
+        try render(renderer);
     }
 }
