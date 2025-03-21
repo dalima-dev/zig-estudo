@@ -83,15 +83,15 @@ fn checkBallCollisionWithPaddle(paddle: *Paddle) bool {
 
 fn handleBallCollisionWithPaddle(paddle: *Paddle) void {
     if (checkBallCollisionWithPaddle(paddle)) {
-        ball.velocity.x = -ball.velocity.x;
-
-        if (ball.velocity.x > 0) {
+        if (ball.velocity.x < 0) {
             if (ball.position.x <= paddle_one.position.x + paddle_one.shape.w) {
                 ball.position.x = paddle_one.position.x + paddle_one.shape.w;
             }
         } else if (ball.position.x >= paddle_two.position.x - ball.shape.w) {
             ball.position.x = paddle_two.position.x - ball.shape.w;
         }
+
+        ball.velocity.x = -ball.velocity.x;
     }
 }
 
