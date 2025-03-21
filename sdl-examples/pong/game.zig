@@ -15,11 +15,11 @@ var elapsed_time_ptr: *f32 = &main.elapsed_time;
 const BALL_SIZE = 10;
 const BALL_SPEED = 300;
 
-const PLAYER_WIDTH = 10;
-const PLAYER_HEIGHT = 50;
+const PADDLE_WIDTH = 10;
+const PADDLE_HEIGHT = 50;
 
 const Ball = Object(BALL_SIZE, BALL_SIZE);
-const Paddle = Object(PLAYER_WIDTH, PLAYER_HEIGHT);
+const Paddle = Object(PADDLE_WIDTH, PADDLE_HEIGHT);
 
 var ball: Ball = undefined;
 var paddle_one: Paddle = undefined;
@@ -105,8 +105,8 @@ fn controlPaddleState(paddle: *Paddle, up: bool, down: bool) void {
 
 pub fn initialize() void {
     ball = Ball.init((WINDOW_WIDTH - BALL_SIZE) / 2, (WINDOW_HEIGHT - BALL_SIZE) / 2, BALL_SPEED, BALL_SPEED);
-    paddle_one = Paddle.init(10, (WINDOW_HEIGHT - PLAYER_HEIGHT) / 2, 0, 0);
-    paddle_two = Paddle.init(WINDOW_WIDTH - PLAYER_WIDTH - 10, (WINDOW_HEIGHT - PLAYER_HEIGHT) / 2, 0, 0);
+    paddle_one = Paddle.init(10, (WINDOW_HEIGHT - PADDLE_HEIGHT) / 2, 0, 0);
+    paddle_two = Paddle.init(WINDOW_WIDTH - PADDLE_WIDTH - 10, (WINDOW_HEIGHT - PADDLE_HEIGHT) / 2, 0, 0);
 }
 
 pub fn update() void {
