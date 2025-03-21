@@ -26,13 +26,19 @@ var ball: Ball = undefined;
 var paddle_one: Paddle = undefined;
 var paddle_two: Paddle = undefined;
 
-const controller = @import("controller.zig");
-var controller_state: controller.ControllerState = .{};
-
 var initial_ball_direction: i8 = 1;
 
 var score_one: u8 = 0;
 var score_two: u8 = 0;
+
+pub const ControllerState = struct {
+    key_w: bool = false,
+    key_s: bool = false,
+    key_o: bool = false,
+    key_k: bool = false,
+};
+
+var controller_state: ControllerState = .{};
 
 fn resetGameState() void {
     std.time.sleep(2_000_000_000);
