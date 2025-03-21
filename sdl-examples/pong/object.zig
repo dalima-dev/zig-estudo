@@ -40,10 +40,6 @@ pub fn Object(w: comptime_int, h: comptime_int) type {
             self.shape.y = y;
         }
 
-        pub fn setVelocity(self: *@This(), x: f32, y: f32) void {
-            self.velocity.x = x;
-            self.velocity.y = y;
-        }
 
         pub fn updatePositionByTime(self: *@This(), elapsed_time: f32) void {
             const x = self.position.x + self.velocity.x * elapsed_time;

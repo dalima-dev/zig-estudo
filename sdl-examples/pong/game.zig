@@ -35,22 +35,22 @@ fn handleBallCollisionWithWall() void {
     const bottom_collision = ball.position.y > WINDOW_HEIGHT - ball.shape.h;
 
     if (left_collision) {
-        ball.setVelocity(-ball.velocity.x, ball.velocity.y);
+        ball.velocity.x *= -1;
         ball.setPosition(0, ball.position.y);
     }
 
     if (right_collision) {
-        ball.setVelocity(-ball.velocity.x, ball.velocity.y);
+        ball.velocity.x *= -1;
         ball.setPosition(WINDOW_WIDTH - ball.shape.w, ball.position.y);
     }
 
     if (top_collision) {
-        ball.setVelocity(ball.velocity.x, -ball.velocity.y);
+        ball.velocity.y *= -1;
         ball.setPosition(ball.position.x, 0);
     }
 
     if (bottom_collision) {
-        ball.setVelocity(ball.velocity.x, -ball.velocity.y);
+        ball.velocity.y *= -1;
         ball.setPosition(ball.position.x, WINDOW_HEIGHT - ball.shape.h);
     }
 }
@@ -100,7 +100,7 @@ fn controlPaddleState(paddle: *Paddle, up: bool, down: bool) void {
     if (up) paddle_vel_y -= 400;
     if (down) paddle_vel_y += 400;
 
-    paddle.setVelocity(0, paddle_vel_y);
+    paddle.velocity.y = paddle_vel_y;
 }
 
 pub fn initialize() void {
