@@ -139,6 +139,18 @@ fn controlPaddleState(paddle: *Paddle, up: bool, down: bool) void {
     paddle.velocity.y = paddle_vel_y;
 }
 
+fn drawCenterDottedLine(renderer: ?*c.SDL_Renderer) void {
+    const x = WINDOW_WIDTH / 2;
+    var y: i32 = 3;
+
+    while (y < WINDOW_WIDTH) : (y += 10) {
+        var dot = c.SDL_FRect{ .x = @floatFromInt(x), .y = @floatFromInt(y), .w = 4, .h = 4 };
+
+        _ = c.SDL_SetRenderDrawColor(renderer, 255, 255, 255, c.SDL_ALPHA_OPAQUE);
+        _ = c.SDL_RenderFillRect(renderer, &dot);
+    }
+}
+
 pub fn initialize() void {
     initial_ball_direction *= -1;
     const initial_ball_direction_f32: f32 = @floatFromInt(initial_ball_direction);
@@ -168,6 +180,7 @@ pub fn update() void {
 }
 
 pub fn draw(renderer: ?*c.SDL_Renderer) !void {
+    drawCenterDottedLine(renderer);
     try drawScore(renderer, score_one, 8, 8);
     try drawScore(renderer, score_two, WINDOW_WIDTH - 383, 8);
     ball.draw(renderer);
